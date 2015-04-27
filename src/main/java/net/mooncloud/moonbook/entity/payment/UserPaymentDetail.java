@@ -1,6 +1,9 @@
 package net.mooncloud.moonbook.entity.payment;
 
+import java.beans.PropertyDescriptor;
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Date;
 
 /**
@@ -285,4 +288,27 @@ public class UserPaymentDetail implements Serializable
 		this.status = status;
 	}
 
+	@Override
+	public String toString()
+	{
+		StringBuilder sb = new StringBuilder();
+		Class<?> clazz = this.getClass();
+		sb.append(clazz.getName()).append(" [");
+		for (Field field : this.getClass().getDeclaredFields())
+		{
+			PropertyDescriptor pd;
+			try
+			{
+				pd = new PropertyDescriptor(field.getName(), this.getClass());
+				Method wM = pd.getReadMethod();// 获得写方法
+				sb.append(field.getName()).append("=").append(wM.invoke(this)).append(", ");
+			}
+			catch (Exception e)
+			{
+				// e.printStackTrace();
+			}
+		}
+		sb.append("]");
+		return sb.toString();
+	}
 }
